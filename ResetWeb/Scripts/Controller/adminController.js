@@ -9,7 +9,7 @@ $scope.showCoupons = false;
 
 $scope.getVipData = function () {
     $http({
-        url: path + '',
+        url: path ,
         method: 'GET',
         content: 'application/json',
         accepts: 'application/json'

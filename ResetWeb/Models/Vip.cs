@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using NanoApi.JsonFile;
+
 
 namespace ResetWeb.Models
 {
-    public class Vip : IEquatable<Vip>
+    public class Vip 
     {
+        [PrimaryKey]
         public int id { get; set; }
         public string name { get; set;}
         public int age { get; set; }
@@ -25,10 +24,5 @@ namespace ResetWeb.Models
             this.country = country;
         }
 
-        public bool Equals(Vip other)
-        {
-            if (other == null) return false;
-            return (this.id.Equals(other.id));
-        }
     }
 }
