@@ -36,7 +36,7 @@
 	<md-button class="md-raised md-primary" ng-click="showCoupons=false; custTbl=false; compTbl=true; getAllCompanies()">Companies</md-button>
 	<md-input-container ng-show=custTbl class="md-block" flex-gt-sm>
     <label>Search customer</label>
-    <input ng-model="search.custName">
+    <input ng-model="search.name">
     </md-input-container>
     
 	<md-input-container ng-show=compTbl class="md-block" flex-gt-sm>
@@ -50,8 +50,9 @@
       <!-- when the user clicks this cell, the myOrder variable will get the value 'nameToLower' -->
       <th md-column md-order-by="id" md-numric>{{customerHeaders[0].name }}</th>
       <!-- the variable myOrder will not be changed when this cell is clicked -->
-      <th md-column md-order-by="custName">{{customerHeaders[1].name }}</th>
+      <th md-column md-order-by="name">{{customerHeaders[1].name }}</th>
       <th md-column>{{customerHeaders[2].name }}</th>
+      <th md-column>{{customerHeaders[3].name }}</th>
     </thead>
     <tbody md-body>
       <!-- we can let ng-repeat sort the columns for us -->
@@ -60,9 +61,16 @@
       <md-icon md-svg-icon="../img/icons/1476371183_General_-_Office_22.svg"></md-icon>
       </md-button></td>
       <td md-cell>{{cust.id}}</td>
-      <td md-cell>{{cust.name}}</td>
+          <td md-cell>
+              <input type="text"
+                     ng-model="cust.name" ng-change="passChanged = 1" />
+          </td>
       <td md-cell><input type="text"
-					ng-model="cust.password" ng-change="passChanged = 1" /></td>
+					ng-model="cust.age" ng-change="passChanged = 1" /></td>
+          <td md-cell>
+              <input type="text"
+                     ng-model="cust.country" ng-change="passChanged = 1" />
+          </td>
 	<td md-cell><md-button class="md-raised md-primary" ng-init="passChanged = 0" ng-disabled="passChanged == 0" ng-click="passChanged = !passChanged; updateCustomer(cust); passChanged = 0">Save</md-button></td>
 	<td md-cell><md-button class="md-raised md-primary"  ng-click="removeDialog($event,$index,cust,customerList,'Customer');">Remove</md-button></td>
 	 </tr>
@@ -73,51 +81,6 @@
   </table>
 </md-table-container>
 
-<md-table-container>
-  <table md-table ng-show=compTbl>
-    <thead md-head md-order="myOrder">
-      <!-- when the user clicks this cell, the myOrder variable will get the value 'nameToLower' -->
-      <th md-column md-order-by="id" md-numric>{{companyHeaders[0].name }}</th>
-      <!-- the variable myOrder will not be changed when this cell is clicked -->
-      <th md-column md-order-by="custName">{{companyHeaders[1].name }}</th>
-      <th md-column>{{companyHeaders[2].name }}</th>
-      <th md-column>{{companyHeaders[3].name }}</th>
-    </thead>
-    <tbody md-body>
-      <!-- we can let ng-repeat sort the columns for us -->
-      <tr md-row ng-repeat="comp in companyList | orderBy: myOrder | filter:searchComp">
-      <td md-cell>{{comp.id}}</td>
-      <td md-cell>{{comp.compName}}</td>
-      <td md-cell><input type="text"
-					ng-model="comp.password" ng-change="passChanged = 1" /></td>
-		<td md-cell>{{comp.email}}</td>			
-	<td md-cell><md-button class="md-raised md-primary" ng-init="passChanged = 0" ng-disabled="passChanged == 0" ng-click="passChanged = !passChanged; updateCompany(comp); passChanged = 0">Save</md-button></td>
-	<td md-cell><md-button class="md-raised md-primary"  ng-click="removeDialog($event,$index,comp,companyList,'Company');">Remove</md-button></td>	
-	 </tr>
-	  <td md-cell><md-button class="md-fab md-primary" ng-click="showCreateDialog($event,'Company')">
-      <md-icon md-svg-icon="../img/icons/1475902602_plus.svg"></md-icon>
-      </md-button></td>
-    </tbody>
-  </table>
-</md-table-container>
-
-<md-table-container ng-show=showCoupons>
-<table md-table>
-<thead md-head>
-<th md-column ng-repeat="couponHeader in couponHeaders">{{couponHeader.name}}</th>
-</thead>
-<tbody>
-<tr md-row ng-repeat="coupon in couponList">
-<td md-cell>{{coupon.id}}</td>
-<td md-cell>{{coupon.title}}</td>
-<td md-cell>{{coupon.startDate | date}}</td>
-<td md-cell>{{coupon.endDate | date}}</td>
-<td md-cell>{{coupon.amount}}</td>
-<td md-cell>{{coupon.type}}</td>
-</tr>
-</tbody>
-</table>
-</md-table-container>
 <h1 ng-show="couponList.length===0">No coupons were purchased</h1>
 </body>
 </html>

@@ -1,9 +1,8 @@
 var app = angular.module('admin', ['ngMaterial','md.data.table']);
 app.controller('adminController', ['$scope', '$http', '$location', '$mdDialog', '$mdToast','$rootScope','$timeout','$window', function ($scope, $http, $location, $mdDialog, $mdToast, $rootScope,$timeout,$window) {
 
-$scope.customerHeaders = [{"name":'Id'},{"name":'Customer name'},{"name":'Password'}];
-$scope.companyHeaders = [{"name":'Id'},{"name":'Company name'},{"name":'Password'},{"name":'email'}];
-$scope.couponHeaders = [{"name" : 'Id'},{"name" : 'Title'},{"name" : 'Start Date'},{"name" : 'End Date'},{"name" : 'Amount'},{"name" : 'Coupon Type'}];
+    $scope.customerHeaders = [{ "name": 'Id' }, { "name": 'VIP name' }, { "name": 'Age' }, { "name": 'Country' }];
+
 var path = 'http://' + $location.host() + ':' + $location.port() + '/api/Vipdata'; 
 $scope.showCoupons = false;
 
