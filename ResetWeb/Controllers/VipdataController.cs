@@ -10,10 +10,9 @@ using ResetWeb.Models;
 
 namespace ResetWeb.Controllers
 {
-
     public class VipdataController : ApiController
     {
-       
+      //  TODO: replace this with an implemented interface of data store, e.g. "FileStore : Istore"
         public HttpSessionState session = HttpContext.Current.Session;
 
         public VipdataController()
@@ -34,26 +33,28 @@ namespace ResetWeb.Controllers
 
         }
 
-
-
         // Get all vips list
         public IEnumerable<Vip> Get()
         {
+          // TODO: hide any implementation details, use nice and readable functions from the data layer
             return ((Dictionary<int, Vip>)session["myData"]).Values;
         }
 
         // Get vip by his/her id number
         public Vip Get(int id)
         {
-            return ((Dictionary<int, Vip>)session["myData"])[id]; 
+            return ((Dictionary<int, Vip>)session["myData"])[id];
         }
 
         // Edit exists vip
         public HttpResponseMessage Put([FromBody] Vip entry)
         {
             Console.WriteLine(entry.age);
+            // TODO: i'd invert the `if` condition, so the the `if` block is as short as possible
+            // e.g. (if entry == null) { return error... }
             if (entry != null)
             {
+              // TODO: try-catch should be an alternative to handling behavior on your own
                 try
                 {
                     Dictionary<int, Vip> vList = (Dictionary<int, Vip>)session["myData"];
@@ -67,14 +68,16 @@ namespace ResetWeb.Controllers
                 catch (KeyNotFoundException e)
                 {
                     return new HttpResponseMessage(HttpStatusCode.BadRequest);
-                }                            
+                }
             }
 
-            return new HttpResponseMessage(HttpStatusCode.Forbidden);     
+            // TODO: replace with BadRequest?
+            return new HttpResponseMessage(HttpStatusCode.Forbidden);
 
         }
 
         // Create new vip
+        // TODO: return the newly created VIP
         public HttpResponseMessage Post(Vip entry)
         {
             try
@@ -91,7 +94,7 @@ namespace ResetWeb.Controllers
                 {
                     return new HttpResponseMessage(HttpStatusCode.BadRequest);
                 }
-                
+
             }
             catch (Exception e)
             {
@@ -100,6 +103,7 @@ namespace ResetWeb.Controllers
         }
 
         // Remove exists vip
+        // TODO: use `id` as a single argument
         public HttpResponseMessage Delete(Vip entry)
         {
             try

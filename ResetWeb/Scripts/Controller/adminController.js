@@ -3,20 +3,16 @@ app.controller('adminController', ['$scope', '$http', '$location', '$mdDialog', 
 
     $scope.customerHeaders = [{ "name": 'Id' }, { "name": 'VIP name' }, { "name": 'Age' }, { "name": 'Country' }];
 
-var path = 'http://' + $location.host() + ':' + $location.port() + '/api/Vipdata'; 
+var path = 'http://' + $location.host() + ':' + $location.port() + '/api/Vipdata';
 $scope.showCoupons = false;
 
 
 $scope.getVipData = function () {
-    $http({
-        url: path + '',
-        method: 'GET',
-        content: 'application/json',
-        accepts: 'application/json'
-    }).success(function (response) {
+    $http.get(path)
+    .success(function(response) {
         $scope.customerList = response;
-
-    }).error(function (response) {
+    })
+    .error(function(response) {
         console.log("error occurred.");
         $scope.openToast("Problem with the server connection, please try to login again")
     });
@@ -25,77 +21,77 @@ $scope.getVipData = function () {
 /* Customer section */
 $scope.getAllCustomer = function() {
 $http({
-  url: path + '/getAllCustomer', 
-  method: 'GET',  
+  url: path + '/getAllCustomer',
+  method: 'GET',
     content: 'application/json',
     accepts: 'application/json'
   }).success(function(response) {
      $scope.customerList = response;
 
 }).error(function(response) {
-     console.log("error occurred."); 
+     console.log("error occurred.");
      $scope.openToast("Problem with the server connection, please try to login again")
    });
 }
 
-$scope.updateCustomer = function(customer) {	
+$scope.updateCustomer = function(customer) {
  $http({
-  url: path + '/updateCustomer/', 
-  method: 'PUT',  
+  url: path + '/updateCustomer/',
+  method: 'PUT',
     data: customer,
     accepts: 'text/plain',
   }).success(function(response) {
-     console.log(response); 
+     console.log(response);
      console.log(customer);
 	 $scope.openToast(customer.custName + " was updated")
      $scope.response = response;
 
 }).error(function(response) {
-     console.log("error occurred."); 
+     console.log("error occurred.");
      $scope.errorToast();
  /*    $scope.response = response; */
-   });   
- 
+   });
+
 }
 
-$scope.removeCustomer = function(customer) {	
+$scope.removeCustomer = function(customer) {
 	 return $http({
-	  url: path + '/removeCustomer/', 
-	  method: 'DELETE',  
+	  url: path + '/removeCustomer/',
+	  method: 'DELETE',
 	    data: customer,
 	    content: 'application/json',
 	    accepts: 'text/plain'
 	  }).success(function(response) {
-	     console.log(response); 
-	     console.log(customer); 
+	     console.log(response);
+	     console.log(customer);
 
 	}).error(function(response) {
-	     console.log("error occurred."); 
+	     console.log("error occurred.");
 	     console.log(customer);
 	     $scope.errorToast();
-	   });   
-	 
+	   });
+
 	}
 
 /* need to put 'return' at the beginning in order to use promise later */
-$scope.createCustomer = function(customer) {	
+$scope.createCustomer = function(customer) {
 	 return $http({
-	  url: path + '/createCustomer', 
-	  method: 'POST',  
+	  url: path + '/createCustomer',
+	  method: 'POST',
 	    data: customer,
 	    accepts: 'application/json'
 	  }).success(function(response) {
-	     console.log("response from createCustomer: " + response.id); 
+	     console.log("response from createCustomer: " + response.id);
 	     console.log("customer from createCustomer: " + customer.id);
-	     console.log("data: " + response.id); 
-	     
+	     console.log("data: " + response.id);
+
 	}).error(function(response) {
-	     console.log("error occurred."); 
+	     console.log("error occurred.");
 	     console.log(customer);
-	     console.log(response); 
+	     console.log(response);
 	     $scope.errorToast();
-	   }); 
-	 
+	   });
+
 	}
 
 
@@ -103,84 +99,84 @@ $scope.createCustomer = function(customer) {
 
 $scope.getAllCompanies = function() {
 	$http({
-	  url: path + '/getAllCompanies', 
-	  method: 'GET',  
+	  url: path + '/getAllCompanies',
+	  method: 'GET',
 	    content: 'application/json',
 	    accepts: 'application/json'
 	  }).success(function(response) {
 	     $scope.companyList = response;
 
 	}).error(function(response) {
-	     console.log("error occurred."); 
+	     console.log("error occurred.");
 	     $scope.errorToast();
 	   });
 	}
 
-$scope.createCompany = function(company) {	
+$scope.createCompany = function(company) {
 	 return $http({
-	  url: path + '/createCompany', 
-	  method: 'POST',  
+	  url: path + '/createCompany',
+	  method: 'POST',
 	    data: company,
 	    accepts: 'application/json'
 	  }).success(function(response) {
-	     console.log("response from createCompany: " + response.id); 
+	     console.log("response from createCompany: " + response.id);
 	     console.log("company from createCompany: " + company.id);
-	     console.log("data: " + response.id); 
-	     
+	     console.log("data: " + response.id);
+
 	}).error(function(response) {
-	     console.log("error occurred."); 
+	     console.log("error occurred.");
 	     console.log(company);
-	     console.log(response); 
+	     console.log(response);
 	     $scope.errorToast();
-	   }); 
-	 
+	   });
+
 	}
 
-$scope.removeCompany = function(company) {	
+$scope.removeCompany = function(company) {
 	 return $http({
-	  url: path + '/removeCompany/', 
-	  method: 'DELETE',  
+	  url: path + '/removeCompany/',
+	  method: 'DELETE',
 	    data: company,
 	    content: 'application/json',
 	    accepts: 'text/plain'
 	  }).success(function(response) {
-	     console.log(response); 
-	     console.log(company); 
+	     console.log(response);
+	     console.log(company);
 
 	}).error(function(response) {
-	     console.log("error occurred."); 
+	     console.log("error occurred.");
 	     console.log(company);
 	     $scope.errorToast();
-	   });   
-	 
+	   });
+
 	}
 
-$scope.updateCompany = function(company) {	
+$scope.updateCompany = function(company) {
 	 $http({
-	  url: path + '/updateCompany/', 
-	  method: 'PUT',  
+	  url: path + '/updateCompany/',
+	  method: 'PUT',
 	    data: company,
 	    accepts: 'text/plain'
 	  }).success(function(response) {
-	     console.log(response); 
+	     console.log(response);
 	     console.log(company);
 
 	    $scope.openToast(company.compName + " was updated");
 
 	}).error(function(response) {
-	     console.log("error occurred."); 
+	     console.log("error occurred.");
 	     $scope.errorToast();
 
-	   });   
-	 
+	   });
+
 	}
 
 /* Coupons */
 
 $scope.getCoupons = function(customer) {
 	return $http({
-	  url: path + '/getCoupons/', 
-	  method: 'POST',  
+	  url: path + '/getCoupons/',
+	  method: 'POST',
 	  data: customer,
 	    content: 'application/json',
 	    accepts: 'application/json'
@@ -189,7 +185,7 @@ $scope.getCoupons = function(customer) {
 	     console.log(response);
 
 	}).error(function(response) {
-	     console.log("error occurred."); 
+	     console.log("error occurred.");
 	     $scope.errorToast();
 	   });
 	}
@@ -230,7 +226,7 @@ $scope.getCoupons = function(customer) {
 
         controller: DialogController
      })
-     
+
 		  }
 	  else if (customerOrCompany === 'Company')
 		  {
@@ -271,19 +267,19 @@ $scope.getCoupons = function(customer) {
 		  }
      function DialogController($scope, $mdDialog) {
 
-	      
+
        $scope.closeDialog = function() {
          $mdDialog.hide();
        }
        $scope.AddCustomer = function(newCustName,newCustPassword)
        {
-    	      this.newLocalCustomer = {custName : newCustName, password : newCustPassword, id : '0'}; 
+    	      this.newLocalCustomer = {custName : newCustName, password : newCustPassword, id : '0'};
     	      console.log("+ " + this.newLocalCustomer.custName + "," + this.newLocalCustomer.password);
-    	         	       
+
     	      	  $scope.createCustomer(this.newLocalCustomer).then(function(response) {
-    	      		$scope.customerList = $scope.customerList.concat(response.data);	
+    	      		$scope.customerList = $scope.customerList.concat(response.data);
     	      		$scope.openToast(response.data.custName + " was added");
-    	      	  },function(error) { 
+    	      	  },function(error) {
        	      		  if (error.data.message === undefined)
    	      			  {
    	      			$scope.errorToast();
@@ -294,22 +290,22 @@ $scope.getCoupons = function(customer) {
     	      		  $scope.openToast(error.data.message);
    	      			  }
     	      		  });
-    	    	   
+
     		       $scope.newCustPassword = '';
-    	  	       $scope.newCustName = ''; 
-    	  	       $mdDialog.hide(); 
+    	  	       $scope.newCustName = '';
+    	  	       $mdDialog.hide();
        }
-    	      
+
     	          $scope.AddCompany = function(newCompName,newCompPassword,newCompEmail)
     	          {
     	        	  console.log("Enter addcompany method");
-    	       	      this.newLocalCompany = {compName : newCompName, password : newCompPassword, email : newCompEmail, id : '0'}; 
+    	       	      this.newLocalCompany = {compName : newCompName, password : newCompPassword, email : newCompEmail, id : '0'};
     	       	      console.log("+ " + this.newLocalCompany.compName + "," + this.newLocalCompany.password);
-    	       	         	       
+
     	       	      	  $scope.createCompany(this.newLocalCompany).then(function(response) {
-    	       	      		$scope.companyList = $scope.companyList.concat(response.data);	
+    	       	      		$scope.companyList = $scope.companyList.concat(response.data);
     	       	      		$scope.openToast(response.data.compName + " was added");
-    	       	      	  },function(error) { 
+    	       	      	  },function(error) {
     	       	      		  if (error.data.message === undefined)
     	       	      			  {
     	       	      			$scope.errorToast();
@@ -319,20 +315,20 @@ $scope.getCoupons = function(customer) {
     	       	      		  console.log(error.data.message);
     	       	      		  $scope.openToast(error.data.message);
     	       	      	  }
-    	       	      		  });  
-    	       	      	  
+    	       	      		  });
+
     	       	      	$scope.newCompName = '';
     	       	      	$scope.newCompPassword = '';
     	       	      	$scope.newCompEmail = '';
-    	       	      	$mdDialog.hide(); 
+    	       	      	$mdDialog.hide();
     	          }
 
    }
-            
+
  }
 
  /* Delete customer dialog */
-  
+
 	  $scope.removeDialog = function($event, Index, individual, list,customerOrCompany) {
 	      var parentEl = angular.element(document.body);
 	      $mdDialog.show({
@@ -356,16 +352,16 @@ $scope.getCoupons = function(customer) {
 	          '</md-dialog>',
 	        controller: DialogController
 	     })
-	     
-	      
+
+
 	     function DialogController($scope, $mdDialog) {
 
-	       var removing;  
+	       var removing;
 	       var individualText;
 	       $scope.closeDialog = function() {
 	         $mdDialog.hide();
 	       }
-	       
+
 	       $scope.Remove = function()
 	       {
 	    	  if (customerOrCompany === 'Customer')
@@ -380,9 +376,9 @@ $scope.getCoupons = function(customer) {
 	    		  	removing = $scope.removeCompany;
 	    		  	individualText = individual.compName;
 	    		  }
-	    	  
-	    	   
-	    	  
+
+
+
 	 	      console.log("-`-`-`");
 		      console.log(this.plannedRemoveIndividual);
 		      console.log("-`-`-`");
@@ -399,12 +395,12 @@ $scope.getCoupons = function(customer) {
 	    	   $scope.openToast(error.data.message);
 	      			  }
 	       });
-	    	  $mdDialog.hide(); 
-	    	   
+	    	  $mdDialog.hide();
+
 	       }
 
 	   }
-	            
+
 	 }
 
 	  $scope.logout = function() {
@@ -413,19 +409,19 @@ $scope.getCoupons = function(customer) {
 		        method: 'POST'
 		    }).success(function(response) {
 		    	$window.location.href = 'http://' + $location.host() + ':' + $location.port() + '/CouponSystemWebTier/views/login.html';
-		    }).error(function (response) {console.log("error occurred."); 
+		    }).error(function (response) {console.log("error occurred.");
 		                                 });
 		}
-	  
+
 /* Toast affect function */
   $scope.openToast = function(msg) {
       $mdToast.show(
               $mdToast.simple()
-                 .textContent(msg)                       
+                 .textContent(msg)
                  .hideDelay(3000)
            );
 	  };
-	
+
 
   $scope.openCouponsTable = function(customer)
   {
@@ -434,13 +430,13 @@ $scope.getCoupons = function(customer) {
 		  $scope.couponList = response.data;
 		  console.log("** " + response.data.id);
 		  });
-	  
+
   }
-  
+
   $scope.errorToast = function() {
 	  $scope.openToast("Problem with the server connection, please try to login again");
   }
-  
+
 }]);
 
 // allow angularjs to send for DELETE JSON format
