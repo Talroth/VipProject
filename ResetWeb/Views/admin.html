@@ -1,86 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>CouponSystem</title>
-<link href="../CSS/main.css" rel="stylesheet" />
-<link rel="stylesheet" href="../CSS/angular-material.min.css">
-<link rel="stylesheet" href="../CSS/md-data-table.min.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
-<script
-	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
-<script
-	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
-<script
-	src="../Scripts/Angular/md-data-table.min.js"></script>	
-<script src="../Scripts/Angular/angular-animate.min.js"></script>
-<script src="../Scripts/Angular/angular-material.min.js"></script>
-<script src="../Scripts/controller/adminController.js"></script>
-<script src="../Scripts/Angular/myComponent.js"></script>
+    <meta charset="ISO-8859-1">
+    <title>VIP DB</title>
+    <!--
+    <link href="../CSS/main.css" rel="stylesheet" />
+        -->
+    <link rel="stylesheet" href="../CSS/angular-material.min.css">
+    <link rel="stylesheet" href="../CSS/md-data-table.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+    <script src="../Scripts/Angular/md-data-table.min.js"></script>
+    <script src="../Scripts/Angular/angular-animate.min.js"></script>
+    <script src="../Scripts/Angular/angular-material.min.js"></script>
+    <script src="../Scripts/controller/adminController.js"></script>
+    <!--
+    <script src="../Scripts/Angular/myComponent.js"></script>
+        -->
 </head>
-<body ng-app="admin" ng-controller="adminController" ng-init="init()" style="background-color: #85e085;">
-    <md-toolbar class="md-hue-2">
-      <div class="md-toolbar-tools">
-          <md-icon md-svg-icon="../img/icons/configuration.svg"></md-icon>
-        <h2>
-          <span>VIP list</span>
-        </h2>
-        <span flex></span>
-        <md-button class="md-icon-button" ng-click="logout()">
-          <md-icon md-svg-icon="../img/icons/exit.svg" ></md-icon>
-        </md-button>
-      </div>
-    </md-toolbar>
-	<md-button class="md-raised md-primary" ng-click="showCoupons=false; custTbl=true; compTbl=false; getVipData()">Customers</md-button>
-	<md-button class="md-raised md-primary" ng-click="showCoupons=false; custTbl=false; compTbl=true; getAllCompanies()">Companies</md-button>
-	<md-input-container ng-show=custTbl class="md-block" flex-gt-sm>
-    <label>Search customer</label>
-    <input ng-model="search.name">
-    </md-input-container>
-    
-	<md-input-container ng-show=compTbl class="md-block" flex-gt-sm>
-    <label>Search company</label>
-    <input ng-model="searchComp.compName">
-    </md-input-container>
-<md-table-container>
-  <table md-table ng-show=custTbl>
-    <thead md-head md-order="myOrder">
-      <th md-column></th>
-      <!-- when the user clicks this cell, the myOrder variable will get the value 'nameToLower' -->
-      <th md-column md-order-by="id" md-numric>{{customerHeaders[0].name }}</th>
-      <!-- the variable myOrder will not be changed when this cell is clicked -->
-      <th md-column md-order-by="name">{{customerHeaders[1].name }}</th>
-      <th md-column>{{customerHeaders[2].name }}</th>
-      <th md-column>{{customerHeaders[3].name }}</th>
-    </thead>
-    <tbody md-body>
-      <!-- we can let ng-repeat sort the columns for us -->
-      <tr md-row ng-repeat="cust in customerList | orderBy: myOrder | filter:search">
-      <td md-cell><md-button class="md-fab md-primary" ng-click="openCouponsTable(cust)">
-      <md-icon md-svg-icon="../img/icons/1476371183_General_-_Office_22.svg"></md-icon>
-      </md-button></td>
-      <td md-cell>{{cust.id}}</td>
-          <td md-cell>
-              <input type="text"
-                     ng-model="cust.name" ng-change="passChanged = 1" />
-          </td>
-      <td md-cell><input type="text"
-					ng-model="cust.age" ng-change="passChanged = 1" /></td>
-          <td md-cell>
-              <input type="text"
-                     ng-model="cust.country" ng-change="passChanged = 1" />
-          </td>
-	<td md-cell><md-button class="md-raised md-primary" ng-init="passChanged = 0" ng-disabled="passChanged == 0" ng-click="passChanged = !passChanged; updateCustomer(cust); passChanged = 0">Save</md-button></td>
-	<td md-cell><md-button class="md-raised md-primary"  ng-click="removeDialog($event,$index,cust,customerList,'Customer');">Remove</md-button></td>
-	 </tr>
-	  <td md-cell><md-button class="md-fab md-primary" ng-click="showCreateDialog($event,'Customer')">
-      <md-icon md-svg-icon="../img/icons/1475902602_plus.svg"></md-icon>
-      </md-button></td>
-    </tbody>
-  </table>
-</md-table-container>
+<body ng-app="vip" ng-controller="vipController" ng-init="getVipData()">
+    <div style="margin-left:15%; margin-right: 15%; max-width: 70%">
+        <md-toolbar class="md-hue-2">
+            <div class="md-toolbar-tools">
+                <h2>
+                    <span>VIP DB</span>
+                </h2>
+            </div>
+        </md-toolbar>
+        <div layout="row" flex>
+            <md-input-container class="md-block md-title" style="max-width:30%;" flex>
+                <label>Search VIP by name</label>
+                <input ng-model="search.name">                              
+            </md-input-container>
+            <md-button class="md-raised md-primary" flex-offset="70" ng-click="showCreateDialog($event)">New VIP</md-button>
+        </div>
+        <md-table-container>
 
-<h1 ng-show="couponList.length===0">No coupons were purchased</h1>
+            <table md-table style="margin-top : 20px">
+                <thead md-head md-order="myOrder">
+                <th md-column md-order-by="id" md-numric>{{ customerHeaders[0].name }}</th>
+                <th md-column md-order-by="name">{{ customerHeaders[1].name }}</th>
+                <th md-column md-order-by="age">{{ customerHeaders[2].name }}</th>
+                <th md-column md-order-by="country">{{ customerHeaders[3].name }}</th>
+                </thead>
+                <tbody md-body>
+                    <tr md-row ng-repeat="vip in vipList | orderBy: myOrder | filter:search">
+                        <td md-cell>{{vip.id}}</td>
+                        <td md-cell>
+                            <input type="text" ng-model="vip.name" ng-change="passChanged = 1" style="background : transparent; border : 0"/>
+                        </td>
+                        <td md-cell>
+                            <input type="number" ng-model="vip.age" ng-change="passChanged = 1" style="background : transparent; border : 0"/>
+                        </td>
+                        <td md-cell>
+                            <input type="text" ng-model="vip.country" ng-change="passChanged = 1" style="background : transparent; border : 0"/>
+                        </td>
+                        <td md-cell><md-button class="md-raised md-primary" ng-init="passChanged = 0" ng-disabled="passChanged == 0" ng-click="updateVip(vip); passChanged = 0">Save</md-button></td>
+                        <td md-cell><md-button class="md-raised md-primary" ng-click="removeDialog($event,$index,vip.id,vipList);">Remove</md-button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+    </div>
 </body>
 </html>

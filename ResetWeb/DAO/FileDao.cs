@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using ResetWeb.Models;
 using NanoApi;
+using System;
+using System.Diagnostics;
 
 namespace ResetWeb.DAO
 {
@@ -25,9 +27,11 @@ namespace ResetWeb.DAO
         public Vip createNewVip(Vip vip)
         {
 
-            vip.id = db.Insert(new Vip() {  name = vip.name, age = vip.age, country = vip.country });
+            db.Insert(new Vip() {  name = vip.name, age = vip.age, country = vip.country });
 
-            return vip;
+            // this is not good way but Jsonfile does not support in returning the auto id assigning, in "real" application with DB this should be implemented properly
+            return db.Select(p => p.name == vip.name && p.age == vip.age && p.country == vip.country).First<Vip>();
+            
         }
 
         public Vip getVip(int id)

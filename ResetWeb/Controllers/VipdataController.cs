@@ -64,11 +64,11 @@ namespace ResetWeb.Controllers
         }
 
         // Remove vip
-        public HttpResponseMessage Delete(Vip entry)
+        public HttpResponseMessage Delete([FromBody] int vipId)
         {
             IVipDao db = FileDao.getInstance();
-
-            db.removeVip(entry.id);
+            
+            db.removeVip(vipId);
 
             return new HttpResponseMessage(HttpStatusCode.OK);
 

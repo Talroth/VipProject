@@ -1,339 +1,146 @@
-var app = angular.module('admin', ['ngMaterial','md.data.table']);
-app.controller('adminController', ['$scope', '$http', '$location', '$mdDialog', '$mdToast','$rootScope','$timeout','$window', function ($scope, $http, $location, $mdDialog, $mdToast, $rootScope,$timeout,$window) {
+var app = angular.module('vip', ['ngMaterial','md.data.table']);
+app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$mdToast','$rootScope','$timeout','$window', function ($scope, $http, $location, $mdDialog, $mdToast, $rootScope,$timeout,$window) {
 
     $scope.customerHeaders = [{ "name": 'Id' }, { "name": 'VIP name' }, { "name": 'Age' }, { "name": 'Country' }];
+    $scope.countries = [{ "name" : "Israel", "name" : "USA", "name" :"France" }];
 
-var path = 'http://' + $location.host() + ':' + $location.port() + '/api/Vipdata'; 
-$scope.showCoupons = false;
+    var path = 'http://' + $location.host() + ':' + $location.port() + '/api/Vipdata'; 
+
+    /* get all vip list */
+    $scope.getVipData = function () {
+        $http({
+            url: path ,
+            method: 'GET',
+            content: 'application/json',
+            accepts: 'application/json'
+        }).success(function (response) {
+            $scope.vipList = response;
+
+        }).error(function (response) {
+            console.log("error occurred.");
+            $scope.openToast("Problem with the server connection, please try to login again")
+        });
+    }
 
 
-$scope.getVipData = function () {
-    $http({
-        url: path ,
-        method: 'GET',
-        content: 'application/json',
-        accepts: 'application/json'
-    }).success(function (response) {
-        $scope.customerList = response;
+    $scope.updateVip = function(vip) {	
+        $http({
+            url: path, 
+            method: 'PUT',  
+            data: vip,
+            accepts: 'text/plain',
+        }).success(function(response) {
+            $scope.openToast(vip.name + " was updated")
 
-    }).error(function (response) {
-        console.log("error occurred.");
-        $scope.openToast("Problem with the server connection, please try to login again")
-    });
-}
-
-/* Customer section */
-$scope.getAllCustomer = function() {
-$http({
-  url: path + '/getAllCustomer', 
-  method: 'GET',  
-    content: 'application/json',
-    accepts: 'application/json'
-  }).success(function(response) {
-     $scope.customerList = response;
-
-}).error(function(response) {
-     console.log("error occurred."); 
-     $scope.openToast("Problem with the server connection, please try to login again")
-   });
-}
-
-$scope.updateCustomer = function(customer) {	
- $http({
-  url: path + '/updateCustomer/', 
-  method: 'PUT',  
-    data: customer,
-    accepts: 'text/plain',
-  }).success(function(response) {
-     console.log(response); 
-     console.log(customer);
-	 $scope.openToast(customer.custName + " was updated")
-     $scope.response = response;
-
-}).error(function(response) {
-     console.log("error occurred."); 
-     $scope.errorToast();
- /*    $scope.response = response; */
-   });   
+        }).error(function(response) {
+            $scope.errorToast();
+        });   
  
-}
+    }
 
-$scope.removeCustomer = function(customer) {	
-	 return $http({
-	  url: path + '/removeCustomer/', 
-	  method: 'DELETE',  
-	    data: customer,
-	    content: 'application/json',
-	    accepts: 'text/plain'
-	  }).success(function(response) {
-	     console.log(response); 
-	     console.log(customer); 
+    $scope.removeVip = function (vipId) {
+        return $http({
+            url: path , 
+            method: 'DELETE',  
+            data: vipId,
+            'content-type': 'application/json',
+            'accepts-type': 'text/plain'
+        }).success(function(response) {
 
-	}).error(function(response) {
-	     console.log("error occurred."); 
-	     console.log(customer);
-	     $scope.errorToast();
-	   });   
+        }).error(function(response) {
+            $scope.errorToast();
+        });   
 	 
-	}
+    }
 
-/* need to put 'return' at the beginning in order to use promise later */
-$scope.createCustomer = function(customer) {	
-	 return $http({
-	  url: path + '/createCustomer', 
-	  method: 'POST',  
-	    data: customer,
-	    accepts: 'application/json'
-	  }).success(function(response) {
-	     console.log("response from createCustomer: " + response.id); 
-	     console.log("customer from createCustomer: " + customer.id);
-	     console.log("data: " + response.id); 
-	     
-	}).error(function(response) {
-	     console.log("error occurred."); 
-	     console.log(customer);
-	     console.log(response); 
-	     $scope.errorToast();
-	   }); 
+    /* need to put 'return' at the beginning in order to use promise later */
+    $scope.createVip = function(vip) {	
+        return $http({
+            url: path , 
+            method: 'POST',  
+            data: vip,
+            accepts: 'application/json'
+        }).success(function(response) {
+            
+        }).error(function(response) {
+            $scope.errorToast();
+        }); 
 	 
-	}
+    }
 
 
-/* Company section */
-
-$scope.getAllCompanies = function() {
-	$http({
-	  url: path + '/getAllCompanies', 
-	  method: 'GET',  
-	    content: 'application/json',
-	    accepts: 'application/json'
-	  }).success(function(response) {
-	     $scope.companyList = response;
-
-	}).error(function(response) {
-	     console.log("error occurred."); 
-	     $scope.errorToast();
-	   });
-	}
-
-$scope.createCompany = function(company) {	
-	 return $http({
-	  url: path + '/createCompany', 
-	  method: 'POST',  
-	    data: company,
-	    accepts: 'application/json'
-	  }).success(function(response) {
-	     console.log("response from createCompany: " + response.id); 
-	     console.log("company from createCompany: " + company.id);
-	     console.log("data: " + response.id); 
-	     
-	}).error(function(response) {
-	     console.log("error occurred."); 
-	     console.log(company);
-	     console.log(response); 
-	     $scope.errorToast();
-	   }); 
-	 
-	}
-
-$scope.removeCompany = function(company) {	
-	 return $http({
-	  url: path + '/removeCompany/', 
-	  method: 'DELETE',  
-	    data: company,
-	    content: 'application/json',
-	    accepts: 'text/plain'
-	  }).success(function(response) {
-	     console.log(response); 
-	     console.log(company); 
-
-	}).error(function(response) {
-	     console.log("error occurred."); 
-	     console.log(company);
-	     $scope.errorToast();
-	   });   
-	 
-	}
-
-$scope.updateCompany = function(company) {	
-	 $http({
-	  url: path + '/updateCompany/', 
-	  method: 'PUT',  
-	    data: company,
-	    accepts: 'text/plain'
-	  }).success(function(response) {
-	     console.log(response); 
-	     console.log(company);
-
-	    $scope.openToast(company.compName + " was updated");
-
-	}).error(function(response) {
-	     console.log("error occurred."); 
-	     $scope.errorToast();
-
-	   });   
-	 
-	}
-
-/* Coupons */
-
-$scope.getCoupons = function(customer) {
-	return $http({
-	  url: path + '/getCoupons/', 
-	  method: 'POST',  
-	  data: customer,
-	    content: 'application/json',
-	    accepts: 'application/json'
-	  }).success(function(response) {
-	     console.log("ok");
-	     console.log(response);
-
-	}).error(function(response) {
-	     console.log("error occurred."); 
-	     $scope.errorToast();
-	   });
-	}
-
-/* Dialog */
+    /* Dialog */
 
 
-  $scope.showCreateDialog = function($event,customerOrCompany) {
-	  if (customerOrCompany === 'Customer')
-		  {
-      var parentEl = angular.element(document.body);
-      $mdDialog.show({
-        parent: parentEl,
-        scope: $scope,
-        preserveScope: true,
-        targetEvent: $event,
-        template:
-          '<md-dialog aria-label="List dialog">' +
-          '  <md-dialog-content>'+
-      	'<md-input-container class="md-block" flex-gt-sm>' +
-      	'<label>New customer name</label>'  +
-      	'<input ng-model="newCustName">'  +
-          '</md-input-container>' +
-          '<md-input-container class="md-block" flex-gt-sm>' +
-          '<label>New customer password</label>'  +
-        		  '<input ng-model="newCustPassword">'  +
-          '</md-input-container>' +
-          '  </md-dialog-content>' +
-          '  <md-dialog-actions>' +
-          '    <md-button ng-click="closeDialog()" class="md-primary">' +
-          '      Close Dialog' +
-          '    </md-button>' +
-          '    <md-button ng-click="AddCustomer(newCustName,newCustPassword)" class="md-primary">' +
-          '      Add' +
-          '    </md-button>' +
-          '  </md-dialog-actions>' +
-          '</md-dialog>',
+    $scope.showCreateDialog = function($event) {
 
-        controller: DialogController
-     })
+        var parentEl = angular.element(document.body);
+        $mdDialog.show({
+            parent: parentEl,
+            scope: $scope,
+            preserveScope: true,
+            targetEvent: $event,
+            template:
+              '<md-dialog aria-label="List dialog">' +
+              '  <md-dialog-content>'+
+            '<md-input-container class="md-block" flex-gt-sm>' +
+            '<label>VIP name</label>'  +
+            '<input ng-model="newName">' +
+              '</md-input-container>' +
+              '<md-input-container class="md-block" flex-gt-sm>' +
+              '<label>Age</label>'  +
+                      '<input type="number" ng-model="newAge">' +
+              '</md-input-container>' +
+              '<md-input-container class="md-block" flex-gt-sm>' +
+              '<label>Country</label>' +
+                      '<input ng-model="newCountry">' +
+              '</md-input-container>' +
+              '  </md-dialog-content>' +
+              '  <md-dialog-actions>' +
+              '    <md-button ng-click="closeDialog()" class="md-primary">' +
+              '      Close Dialog' +
+              '    </md-button>' +
+              '    <md-button ng-click="AddCustomer(newName,newAge, newCountry)" class="md-primary">' +
+              '      Add' +
+              '    </md-button>' +
+              '  </md-dialog-actions>' +
+              '</md-dialog>',
+
+            controller: DialogController
+        })
      
-		  }
-	  else if (customerOrCompany === 'Company')
-		  {
-	      var parentEl = angular.element(document.body);
-	      $mdDialog.show({
-	        parent: parentEl,
-	        scope: $scope,
-	        preserveScope: true,
-	        targetEvent: $event,
-	        template:
-	          '<md-dialog aria-label="List dialog">' +
-	          '  <md-dialog-content>'+
-	      	'<md-input-container class="md-block" flex-gt-sm>' +
-	      	'<label>New company name</label>'  +
-	      	'<input ng-model="newCompName">'  +
-	          '</md-input-container>' +
-	          '<md-input-container class="md-block" flex-gt-sm>' +
-	          '<label>New company password</label>'  +
-	        		  '<input ng-model="newCompPassword">'  +
-	          '</md-input-container>' +
-	          '<md-input-container class="md-block" flex-gt-sm>' +
-	         '<label>New company email</label>'  +
-	        	'<input ng-model="newCompEmail">'  +
-	          '</md-input-container>'  +
-	          '  </md-dialog-content>' +
-	          '  <md-dialog-actions>' +
-	          '    <md-button ng-click="closeDialog()" class="md-primary">' +
-	          '      Close Dialog' +
-	          '    </md-button>' +
-	          '    <md-button ng-click="AddCompany(newCompName,newCompPassword,newCompEmail)" class="md-primary">' +
-	          '      Add' +
-	          '    </md-button>' +
-	          '  </md-dialog-actions>' +
-	          '</md-dialog>',
-
-	        controller: DialogController
-	     })
-		  }
-     function DialogController($scope, $mdDialog) {
+	 
+    function DialogController($scope, $mdDialog) {
 
 	      
-       $scope.closeDialog = function() {
-         $mdDialog.hide();
-       }
-       $scope.AddCustomer = function(newCustName,newCustPassword)
-       {
-    	      this.newLocalCustomer = {custName : newCustName, password : newCustPassword, id : '0'}; 
-    	      console.log("+ " + this.newLocalCustomer.custName + "," + this.newLocalCustomer.password);
+        $scope.closeDialog = function() {
+            $mdDialog.hide();
+        }
+        $scope.AddCustomer = function(newName,newAge, newCountry)
+        {
+            this.newLocalCustomer = {name : newName, age : newAge, country : newCountry}; 
+            console.log("+ " + newName + "," + newAge);
     	         	       
-    	      	  $scope.createCustomer(this.newLocalCustomer).then(function(response) {
-    	      		$scope.customerList = $scope.customerList.concat(response.data);	
-    	      		$scope.openToast(response.data.custName + " was added");
-    	      	  },function(error) { 
-       	      		  if (error.data.message === undefined)
-   	      			  {
-   	      			$scope.errorToast();
-   	      			  }
-   	      		  else
-   	      			  {
-    	      		  console.log(error.data.message);
-    	      		  $scope.openToast(error.data.message);
-   	      			  }
-    	      		  });
+            $scope.createVip(this.newLocalCustomer).then(function(response) {
+                $scope.vipList = $scope.vipList.concat(response.data);
+                $scope.openToast(response.data.name + " was added");
+            },function(error) { 
+                    $scope.openToast(error.data.message);
+            });
     	    	   
-    		       $scope.newCustPassword = '';
-    	  	       $scope.newCustName = ''; 
-    	  	       $mdDialog.hide(); 
-       }
+            $scope.newName = '';
+            $scope.newAge = ''; 
+            $scope.newCountry = '';
+            $mdDialog.hide(); 
+        }
     	      
-    	          $scope.AddCompany = function(newCompName,newCompPassword,newCompEmail)
-    	          {
-    	        	  console.log("Enter addcompany method");
-    	       	      this.newLocalCompany = {compName : newCompName, password : newCompPassword, email : newCompEmail, id : '0'}; 
-    	       	      console.log("+ " + this.newLocalCompany.compName + "," + this.newLocalCompany.password);
-    	       	         	       
-    	       	      	  $scope.createCompany(this.newLocalCompany).then(function(response) {
-    	       	      		$scope.companyList = $scope.companyList.concat(response.data);	
-    	       	      		$scope.openToast(response.data.compName + " was added");
-    	       	      	  },function(error) { 
-    	       	      		  if (error.data.message === undefined)
-    	       	      			  {
-    	       	      			$scope.errorToast();
-    	       	      			  }
-    	       	      		  else
-    	       	      			  {
-    	       	      		  console.log(error.data.message);
-    	       	      		  $scope.openToast(error.data.message);
-    	       	      	  }
-    	       	      		  });  
-    	       	      	  
-    	       	      	$scope.newCompName = '';
-    	       	      	$scope.newCompPassword = '';
-    	       	      	$scope.newCompEmail = '';
-    	       	      	$mdDialog.hide(); 
-    	          }
-
-   }
+    }
             
- }
+}
 
  /* Delete customer dialog */
   
-	  $scope.removeDialog = function($event, Index, individual, list,customerOrCompany) {
+	  $scope.removeDialog = function($event, Index, id,list) {
 	      var parentEl = angular.element(document.body);
 	      $mdDialog.show({
 	        parent: parentEl,
@@ -349,7 +156,7 @@ $scope.getCoupons = function(customer) {
 	          '    <md-button ng-click="closeDialog()" class="md-primary">' +
 	          '      No' +
 	          '    </md-button>' +
-	          '    <md-button ng-click="Remove()" class="md-primary">' +
+	          '    <md-button ng-click="Remove(id)" class="md-primary">' +
 	          '      Yes' +
 	          '    </md-button>' +
 	          '  </md-dialog-actions>' +
@@ -359,8 +166,7 @@ $scope.getCoupons = function(customer) {
 	     
 	      
 	     function DialogController($scope, $mdDialog) {
-
-	       var removing;  
+ 
 	       var individualText;
 	       $scope.closeDialog = function() {
 	         $mdDialog.hide();
@@ -368,36 +174,12 @@ $scope.getCoupons = function(customer) {
 	       
 	       $scope.Remove = function()
 	       {
-	    	  if (customerOrCompany === 'Customer')
-	    		  {
-	    		  	this.plannedRemoveIndividual = "{\"custName\" : \"" + individual.custName + "\", \"password\" : \"" + individual.password + "\", \"id\" : \"" + individual.id.toString() + "\"}";
-	    		  	removing = $scope.removeCustomer;
-	    		  	individualText = individual.custName;
-	    		  }
-	    	  else if (customerOrCompany === 'Company')
-	    		  {
-	    		  	this.plannedRemoveIndividual = "{\"compName\" : \"" + individual.compName + "\", \"password\" : \"" + individual.password + "\", \"email\" : \"" + individual.email + "\", \"id\" : \"" + individual.id.toString() + "\"}";
-	    		  	removing = $scope.removeCompany;
-	    		  	individualText = individual.compName;
-	    		  }
-	    	  
-	    	   
-	    	  
-	 	      console.log("-`-`-`");
-		      console.log(this.plannedRemoveIndividual);
-		      console.log("-`-`-`");
-		      removing(this.plannedRemoveIndividual).then(function(response){
+	    		  	
+		      $scope.removeVip(id).then(function(response){
 		      list.splice(Index,1);
-		      $scope.openToast(individualText + " was removed");
+		      $scope.openToast("Removal was performed successfully"); 
 	       },function(error) {
-	      		  if (error.data.message === undefined)
-	      			  {
 	      			$scope.errorToast();
-	      			  }
-	      		  else
-	      			  {
-	    	   $scope.openToast(error.data.message);
-	      			  }
 	       });
 	    	  $mdDialog.hide(); 
 	    	   
@@ -407,15 +189,6 @@ $scope.getCoupons = function(customer) {
 	            
 	 }
 
-	  $scope.logout = function() {
-		    $http({
-		        url: "http://" + $location.host() + ":" + $location.port() + "/CouponSystemWebTier/rest/adminService/logout",
-		        method: 'POST'
-		    }).success(function(response) {
-		    	$window.location.href = 'http://' + $location.host() + ':' + $location.port() + '/CouponSystemWebTier/views/login.html';
-		    }).error(function (response) {console.log("error occurred."); 
-		                                 });
-		}
 	  
 /* Toast affect function */
   $scope.openToast = function(msg) {
@@ -426,16 +199,6 @@ $scope.getCoupons = function(customer) {
            );
 	  };
 	
-
-  $scope.openCouponsTable = function(customer)
-  {
-	  $scope.showCoupons = true;
-	  $scope.getCoupons(customer).then(function(response) {
-		  $scope.couponList = response.data;
-		  console.log("** " + response.data.id);
-		  });
-	  
-  }
   
   $scope.errorToast = function() {
 	  $scope.openToast("Problem with the server connection, please try to login again");
@@ -449,7 +212,8 @@ app.config(function($httpProvider) {
 	   * make delete type json
 	   */
 	  $httpProvider.defaults.headers["delete"] = {
-	    'Content-Type': 'application/json;charset=utf-8'
+	      'Content-Type': 'application/json;charset=utf-8' 
+
 	  };
 	}
 

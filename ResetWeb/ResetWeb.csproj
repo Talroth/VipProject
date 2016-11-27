@@ -102,7 +102,6 @@
     <Content Include="Scripts\Angular\ng-file-upload.min.js" />
     <Content Include="Scripts\Controller\adminController.js" />
     <Content Include="Views\admin.html" />
-    <Content Include="Views\Index.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
