@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html>
+<body ng-init="lock1 = false; lock2 = false; lock3 = false">
+    <md-dialog aria-label="List dialog">
+        <md-dialog-content>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>Add new VIP to the DB</h2>
+                </div>
+            </md-toolbar>
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>VIP name</label>
+                <input ng-model="newName" ng-change="lock1 = true && newName != ''">
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>Age</label>
+                <input type="number" min="0" ng-model="newAge" ng-change="lock2 = true && newAge != null">
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>Country</label>
+                <md-select ng-model="newCountry" ng-change="lock3 = true && newCountry != null">
+                    <md-option value="{{ country }}" ng-repeat="country in countries">{{ country }}</md-option>
+                </md-select>
+            </md-input-container>
+        </md-dialog-content>
+        <md-dialog-actions>
+            <md-button ng-click="closeDialog()" class="md-primary">Close Dialog</md-button>
+            <md-button ng-click="AddCustomer(newName,newAge, newCountry)" ng-disabled="!lock1 || !lock2 || !lock3" class="md-primary">Add</md-button>
+    </md-dialog>
+</body>
+</html>

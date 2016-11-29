@@ -1,12 +1,14 @@
 var app = angular.module('vip', ['ngMaterial','md.data.table']);
-app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$mdToast','$rootScope','$timeout','$window', function ($scope, $http, $location, $mdDialog, $mdToast, $rootScope,$timeout,$window) {
+app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$mdToast','$timeout', function ($scope, $http, $location, $mdDialog, $mdToast,$timeout) {
 
-    $scope.customerHeaders = [{ "name": 'Id' }, { "name": 'VIP name' }, { "name": 'Age' }, { "name": 'Country' }];
-    $scope.countries = [{ "name" : "Israel", "name" : "USA", "name" :"France" }];
+    $scope.Headers = [{ "name": 'Id' }, { "name": 'VIP name' }, { "name": 'Age' }, { "name": 'Country' }];
+
+    // ofcourse this should be taken from some DB or other repo but in order to keep the code simple i implement it like that
+    $scope.countries = [ "Israel","USA", "France","Australia","New Zealand","Brazil"];
 
     var path = 'http://' + $location.host() + ':' + $location.port() + '/api/Vipdata'; 
 
-    /* get all vip list */
+    /* get all vip list by call Get service without arguments*/
     $scope.getVipData = function () {
         $http({
             url: path ,
@@ -17,12 +19,11 @@ app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$
             $scope.vipList = response;
 
         }).error(function (response) {
-            console.log("error occurred.");
-            $scope.openToast("Problem with the server connection, please try to login again")
+            $scope.errorToast();
         });
     }
 
-
+    // update vip by passing vip object to VipdataController/Put
     $scope.updateVip = function(vip) {	
         $http({
             url: path, 
@@ -30,7 +31,7 @@ app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$
             data: vip,
             accepts: 'text/plain',
         }).success(function(response) {
-            $scope.openToast(vip.name + " was updated")
+            $scope.openToast(vip.name + " was updated");
 
         }).error(function(response) {
             $scope.errorToast();
@@ -38,13 +39,14 @@ app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$
  
     }
 
+    // remove vip by passing vip id to VipdataController/DELETE
     $scope.removeVip = function (vipId) {
         return $http({
             url: path , 
             method: 'DELETE',  
             data: vipId,
-            'content-type': 'application/json',
-            'accepts-type': 'text/plain'
+            content: 'application/json',
+            accepts: 'text/plain'
         }).success(function(response) {
 
         }).error(function(response) {
@@ -53,7 +55,7 @@ app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$
 	 
     }
 
-    /* need to put 'return' at the beginning in order to use promise later */
+    // create vip by passing vip object to VipdataController/POST
     $scope.createVip = function(vip) {	
         return $http({
             url: path , 
@@ -71,6 +73,7 @@ app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$
 
     /* Dialog */
 
+    // Create new VIP dialog
 
     $scope.showCreateDialog = function($event) {
 
@@ -80,48 +83,24 @@ app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$
             scope: $scope,
             preserveScope: true,
             targetEvent: $event,
-            template:
-              '<md-dialog aria-label="List dialog">' +
-              '  <md-dialog-content>'+
-            '<md-input-container class="md-block" flex-gt-sm>' +
-            '<label>VIP name</label>'  +
-            '<input ng-model="newName">' +
-              '</md-input-container>' +
-              '<md-input-container class="md-block" flex-gt-sm>' +
-              '<label>Age</label>'  +
-                      '<input type="number" ng-model="newAge">' +
-              '</md-input-container>' +
-              '<md-input-container class="md-block" flex-gt-sm>' +
-              '<label>Country</label>' +
-                      '<input ng-model="newCountry">' +
-              '</md-input-container>' +
-              '  </md-dialog-content>' +
-              '  <md-dialog-actions>' +
-              '    <md-button ng-click="closeDialog()" class="md-primary">' +
-              '      Close Dialog' +
-              '    </md-button>' +
-              '    <md-button ng-click="AddCustomer(newName,newAge, newCountry)" class="md-primary">' +
-              '      Add' +
-              '    </md-button>' +
-              '  </md-dialog-actions>' +
-              '</md-dialog>',
-
+            templateUrl:
+                'createVip.html',
             controller: DialogController
         })
      
 	 
-    function DialogController($scope, $mdDialog) {
-
-	      
-        $scope.closeDialog = function() {
+    function DialogController($scope, $mdDialog) {	      
+        $scope.closeDialog = function () {
+            $scope.newName = '';
+            $scope.newAge = null;
+            $scope.newCountry = null;
             $mdDialog.hide();
         }
         $scope.AddCustomer = function(newName,newAge, newCountry)
         {
-            this.newLocalCustomer = {name : newName, age : newAge, country : newCountry}; 
-            console.log("+ " + newName + "," + newAge);
+            this.newVip = {name : newName, age : newAge, country : newCountry}; 
     	         	       
-            $scope.createVip(this.newLocalCustomer).then(function(response) {
+            $scope.createVip(this.newVip).then(function (response) {
                 $scope.vipList = $scope.vipList.concat(response.data);
                 $scope.openToast(response.data.name + " was added");
             },function(error) { 
@@ -129,8 +108,8 @@ app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$
             });
     	    	   
             $scope.newName = '';
-            $scope.newAge = ''; 
-            $scope.newCountry = '';
+            $scope.newAge = null;
+            $scope.newCountry = null;
             $mdDialog.hide(); 
         }
     	      
@@ -138,7 +117,7 @@ app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$
             
 }
 
- /* Delete customer dialog */
+ // Delete customer dialog/
   
 	  $scope.removeDialog = function($event, Index, id,list) {
 	      var parentEl = angular.element(document.body);
@@ -147,27 +126,15 @@ app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$
 	        scope: $scope,
 	        preserveScope: true,
 	        targetEvent: $event,
-	        template:
-	          '<md-dialog aria-label="List dialog">' +
-	          '  <md-dialog-content>'+
-	      	'<md-input-container class="md-block" flex-gt-sm>' +
-	          '<label>Would you like to delete the customer?</label>' +
-	          '  <md-dialog-actions>' +
-	          '    <md-button ng-click="closeDialog()" class="md-primary">' +
-	          '      No' +
-	          '    </md-button>' +
-	          '    <md-button ng-click="Remove(id)" class="md-primary">' +
-	          '      Yes' +
-	          '    </md-button>' +
-	          '  </md-dialog-actions>' +
-	          '</md-dialog>',
+	        templateUrl:
+               'removeVip.html',
 	        controller: DialogController
 	     })
 	     
 	      
 	     function DialogController($scope, $mdDialog) {
  
-	       var individualText;
+	         delName = list[Index].name;
 	       $scope.closeDialog = function() {
 	         $mdDialog.hide();
 	       }
@@ -176,17 +143,16 @@ app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$
 	       {
 	    		  	
 		      $scope.removeVip(id).then(function(response){
-		      list.splice(Index,1);
-		      $scope.openToast("Removal was performed successfully"); 
+		          list.splice(Index, 1);
+		          
+		          $scope.openToast(delName + " was removed successfully " );
 	       },function(error) {
 	      			$scope.errorToast();
 	       });
 	    	  $mdDialog.hide(); 
 	    	   
 	       }
-
-	   }
-	            
+	   }	            
 	 }
 
 	  
@@ -206,11 +172,8 @@ app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$
   
 }]);
 
-// allow angularjs to send for DELETE JSON format
+// allow angularjs to send  DELETE for JSON format
 app.config(function($httpProvider) {
-	  /**
-	   * make delete type json
-	   */
 	  $httpProvider.defaults.headers["delete"] = {
 	      'Content-Type': 'application/json;charset=utf-8' 
 

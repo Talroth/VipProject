@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+<html>
+<body>
+    <md-dialog aria-label="List dialog">
+        <md-dialog-content>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>Remove VIP from the DB</h2>
+                </div>
+            </md-toolbar>
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>Would you like to delete the VIP?</label>
+                <md-dialog-actions>
+                    <md-button ng-click="closeDialog()" class="md-primary">No</md-button>
+                    <md-button ng-click="Remove(id)" class="md-primary">Yes</md-button>
+                </md-dialog-actions>
+    </md-dialog>
+</body>
+</html>

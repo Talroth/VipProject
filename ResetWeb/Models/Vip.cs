@@ -8,7 +8,7 @@ namespace ResetWeb.Models
         [PrimaryKey]
         public int id { get; set; }
         public string name { get; set;}
-        public int age { get; set; }
+        private int age;
         public string country { get; set; }
      
         public Vip()
@@ -22,6 +22,20 @@ namespace ResetWeb.Models
             this.name = name;
             this.age = age;
             this.country = country;
+        }
+
+        public int Age
+        {
+            get
+            {
+                return this.age;
+            }
+            set
+            {
+                if (value < 0)
+                    value = 0;
+                this.age = value;
+            }
         }
 
     }

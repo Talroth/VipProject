@@ -52,7 +52,15 @@
       <HintPath>..\packages\JsonFileDB.0.8.8.2\lib\net45\NanoApi.JsonFile.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -62,6 +70,14 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -71,37 +87,20 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.Formatting">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http.WebHost">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="CSS\angular-material.min.css" />
-    <Content Include="CSS\bootstrap.min.css" />
-    <Content Include="CSS\login.css" />
-    <Content Include="CSS\main.css" />
+    <Content Include="CSS\extraStyle.css" />
     <Content Include="CSS\md-data-table.min.css" />
-    <Content Include="CSS\Roberto.css" />
-    <Content Include="CSS\table.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\Angular\angular-animate.min.js" />
+    <Content Include="Scripts\Angular\angular-aria.min.js" />
     <Content Include="Scripts\Angular\angular-material.min.js" />
-    <Content Include="Scripts\Angular\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\Angular\angular-messages.min.js" />
+    <Content Include="Scripts\Angular\angular.min.js" />
     <Content Include="Scripts\Angular\md-data-table.min.js" />
-    <Content Include="Scripts\Angular\myComponent.js" />
-    <Content Include="Scripts\Angular\ng-file-upload-shim.min.js" />
-    <Content Include="Scripts\Angular\ng-file-upload.min.js" />
-    <Content Include="Scripts\Controller\adminController.js" />
-    <Content Include="Views\admin.html" />
+    <Content Include="Scripts\Controller\vipController.js" />
+    <Content Include="Views\Index.html" />
+    <Content Include="Views\createVip.html" />
+    <Content Include="Views\removeVip.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

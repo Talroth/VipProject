@@ -1,0 +1,26 @@
+﻿
+md-input-container.extra  {
+    max-width:30%;
+    
+}
+
+div.extra {
+    margin-left:15%;
+    margin-right: 15%;
+    max-width: 70%
+}
+
+table.extra {
+    margin-top : 20px;
+
+    
+}
+
+
+input.extra {
+    background : transparent;
+    border : 0;
+}
+
+body {
+}
