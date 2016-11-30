@@ -11,8 +11,8 @@ namespace ResetWeb.DAO
     {
         Dictionary<int,Vip> getVipList();
         Vip getVip(int id);
-        Vip createNewVip(Vip vip);
-        void removeVip(int id);
-        void updtaeVip(Vip vip);
+        Vip createVip(Vip vip);
+        bool removeVip(int id);
+        bool updateVip(Vip vip);
     }
 }

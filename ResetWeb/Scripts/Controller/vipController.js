@@ -6,6 +6,8 @@ app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$
     // ofcourse this should be taken from some DB or other repo but in order to keep the code simple i implement it like that
     $scope.countries = [ "Israel","USA", "France","Australia","New Zealand","Brazil"];
 
+
+
     var path = 'http://' + $location.host() + ':' + $location.port() + '/api/Vipdata'; 
 
     /* get all vip list by call Get service without arguments*/
@@ -13,10 +15,18 @@ app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$
         $http({
             url: path ,
             method: 'GET',
-            content: 'application/json',
-            accepts: 'application/json'
+            headers: {
+                'Content-type': 'application/json',
+                'Accept': 'application/json'
+            }
         }).success(function (response) {
-            $scope.vipList = response;
+            if (response == null) {
+                $scope.errorToast();
+            }
+            else
+            {
+                $scope.vipList = response;
+            }
 
         }).error(function (response) {
             $scope.errorToast();
@@ -29,9 +39,11 @@ app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$
             url: path, 
             method: 'PUT',  
             data: vip,
-            accepts: 'text/plain',
-        }).success(function(response) {
-            $scope.openToast(vip.name + " was updated");
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).success(function (response) {
+            $scope.openToast(vip.Name + " was updated");
 
         }).error(function(response) {
             $scope.errorToast();
@@ -45,8 +57,10 @@ app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$
             url: path , 
             method: 'DELETE',  
             data: vipId,
-            content: 'application/json',
-            accepts: 'text/plain'
+            headers: {
+                'Content-type': 'application/json',
+                'Accept': 'application/json'
+            }
         }).success(function(response) {
 
         }).error(function(response) {
@@ -61,7 +75,9 @@ app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$
             url: path , 
             method: 'POST',  
             data: vip,
-            accepts: 'application/json'
+            headers: {
+                'Accept': 'application/json'
+            }
         }).success(function(response) {
             
         }).error(function(response) {
@@ -89,22 +105,35 @@ app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$
         })
      
 	 
-    function DialogController($scope, $mdDialog) {	      
-        $scope.closeDialog = function () {
-            $scope.newName = '';
-            $scope.newAge = null;
-            $scope.newCountry = null;
-            $mdDialog.hide();
-        }
-        $scope.AddCustomer = function(newName,newAge, newCountry)
+        function DialogController($scope, $mdDialog) {
+
+            // Lock "add" button in create vip dialog 
+            $scope.locks = [{ "name": false }, { "age": false }, { "country": false }];
+
+            $scope.closeDialog = function ()
+            {
+                $scope.newName = '';
+                $scope.newAge = null;
+                $scope.newCountry = null;
+                $mdDialog.hide();
+            }
+
+        $scope.AddVip = function(newName,newAge, newCountry)
         {
             this.newVip = {name : newName, age : newAge, country : newCountry}; 
     	         	       
             $scope.createVip(this.newVip).then(function (response) {
-                $scope.vipList = $scope.vipList.concat(response.data);
-                $scope.openToast(response.data.name + " was added");
+                if (response != null)
+                {
+                    $scope.vipList = $scope.vipList.concat(response.data);
+                    $scope.openToast(response.data.Name + " was added");
+                }
+                else
+                {
+                    $scope.errorToast();
+                }
             },function(error) { 
-                    $scope.openToast(error.data.message);
+                    $scope.errorToast();
             });
     	    	   
             $scope.newName = '';
@@ -134,7 +163,7 @@ app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$
 	      
 	     function DialogController($scope, $mdDialog) {
  
-	         delName = list[Index].name;
+	       
 	       $scope.closeDialog = function() {
 	         $mdDialog.hide();
 	       }
@@ -142,9 +171,9 @@ app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$
 	       $scope.Remove = function()
 	       {
 	    		  	
-		      $scope.removeVip(id).then(function(response){
-		          list.splice(Index, 1);
-		          
+	           $scope.removeVip(id).then(function (response) {
+	              delName = list[Index].Name;
+		          list.splice(Index, 1);		          
 		          $scope.openToast(delName + " was removed successfully " );
 	       },function(error) {
 	      			$scope.errorToast();
@@ -167,7 +196,7 @@ app.controller('vipController', ['$scope', '$http', '$location', '$mdDialog', '$
 	
   
   $scope.errorToast = function() {
-	  $scope.openToast("Problem with the server connection, please try to login again");
+	  $scope.openToast("Problem with the server connection / operation failed, please try to login again");
   }
   
 }]);

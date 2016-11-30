@@ -1,7 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <!-- ISO-8859-1 --> 
     <meta charset="utf-8">
     <title>VIP DB</title>
 
@@ -32,7 +31,7 @@
         <div layout="row" flex>
             <md-input-container class="md-block md-title extra" flex>
                 <label>Search VIP by name</label>
-                <input ng-model="search.name">                              
+                <input ng-model="search.Name">                              
             </md-input-container>
             <md-button class="md-raised md-primary" flex-offset="70" ng-click="showCreateDialog($event)">New VIP</md-button>
         </div>
@@ -41,30 +40,30 @@
             <table md-table class="extra">
                 <thead md-head md-order="myOrder">
                     <tr>
-                        <th md-column md-order-by="id" md-numric>{{ Headers[0].name }}</th>
-                        <th md-column md-order-by="name">{{ Headers[1].name }}</th>
-                        <th md-column md-order-by="age">{{ Headers[2].name }}</th>
-                        <th md-column md-order-by="country">{{ Headers[3].name }}</th>
+                        <th md-column md-order-by="Id" md-numric>{{ Headers[0].name }}</th>
+                        <th md-column md-order-by="Name">{{ Headers[1].name }}</th>
+                        <th md-column md-order-by="Age">{{ Headers[2].name }}</th>
+                        <th md-column md-order-by="Country">{{ Headers[3].name }}</th>
                     </tr>
                 </thead>
                 <tbody md-body>
                     <tr md-row ng-repeat="vip in vipList | orderBy: myOrder | filter:search">
-                        <td md-cell>{{vip.id}}</td>
+                        <td md-cell>{{vip.Id}}</td>
                         <td md-cell>
-                            <input type="text" ng-model="vip.name" ng-change="passChanged = 1" class="extra"/>
+                            <input type="text" ng-model="vip.Name" ng-change="passChanged = 1" class="extra"/>
                         </td>
                         <td md-cell>
-                            <input type="number" min="0" ng-model="vip.Age" ng-change="passChanged = 1" class="extra""/>
+                            <input type="number" min="0" ng-model="vip.Age" ng-change="passChanged = 1" class="extra"/>
                         </td>
                         <td md-cell>
-                            <md-select ng-model="vip.country" ng-change="passChanged = 1">
+                            <md-select ng-model="vip.Country" ng-change="passChanged = 1">
                                 <md-option value="{{ country }}" ng-repeat="country in countries">{{ country }}</md-option>
                             </md-select>
                         </td>
                         <td md-cell><md-button class="md-raised md-primary" ng-init="passChanged = 0" 
-                                               ng-disabled="passChanged == 0 || vip.name ==''|| vip.Age == null || vip.country == null" 
+                                               ng-disabled="passChanged == 0 || vip.Name ==''|| vip.Age == null || vip.Country == null" 
                                                ng-click="updateVip(vip); passChanged = 0">Save</md-button></td>
-                        <td md-cell><md-button class="md-raised md-primary" ng-click="removeDialog($event,$index,vip.id,vipList);">Remove</md-button></td>
+                        <td md-cell><md-button class="md-raised md-primary" ng-click="removeDialog($event,$index,vip.Id,vipList);">Remove</md-button></td>
                     </tr>
                 </tbody>
             </table>

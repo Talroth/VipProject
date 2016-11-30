@@ -11,11 +11,11 @@ namespace ResetWeb.Controllers
 
     public class VipdataController : ApiController
     {
-       
+        private IVipDao db = FileDao.getInstance();
 
         public VipdataController()
         {
-
+            
         }
 
 
@@ -23,54 +23,47 @@ namespace ResetWeb.Controllers
         // Get all vips list
         public IEnumerable<Vip> Get()
         {
-            IVipDao db = FileDao.getInstance();
-
             return db.getVipList().Values;
-
         }
 
         // Get vip by his/her id number
         public Vip Get(int id)
         {
-            IVipDao db = FileDao.getInstance();
-
             return db.getVip(id);
         }
 
         // Edit vip
         public HttpResponseMessage Put([FromBody] Vip entry)
         {
-            IVipDao db = FileDao.getInstance();
-
-            db.updtaeVip(entry);
-
-            return new HttpResponseMessage(HttpStatusCode.OK);  
+            if (db.updateVip(entry))
+            {
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+            else
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
         }
 
         // Create new vip
         public Vip Post(Vip entry)
         {
-            IVipDao db = FileDao.getInstance();
+            Vip createdVip = db.createVip(entry);
 
-            return db.createNewVip(entry);
-
-
-
-            //        return new HttpResponseMessage(HttpStatusCode.BadRequest);
-
-
-            //    return new HttpResponseMessage(HttpStatusCode.NotFound);
-
+            return createdVip;
         }
 
         // Remove vip
         public HttpResponseMessage Delete([FromBody] int vipId)
         {
-            IVipDao db = FileDao.getInstance();
-            
-            db.removeVip(vipId);
-
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            if (db.removeVip(vipId))
+            {
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+            else
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
 
         }
     }
